@@ -8,31 +8,31 @@ create table guests (
 );
 
 -- Bảng phòng
-CREATE TABLE rooms (
+create table rooms (
     room_id int auto_increment primary key,
-    room_type VARCHAR(50),
-    price_per_day DECIMAL(10,0)
+    room_type varchar(50),
+    price_per_day decimal(10,0)
 );
 
 -- Bảng đặt phòng
-CREATE TABLE bookings (
-    booking_id INT PRIMARY KEY AUTO_INCREMENT,
-    guest_id INT,
-    room_id INT,
-    check_in DATE,
-    check_out DATE,
-    FOREIGN KEY (guest_id) REFERENCES guests(guest_id),
-    FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+create table bookings (
+    booking_id int auto_increment primary key,
+    guest_id int,
+    room_id int,
+    check_in date,
+    check_out date,
+    foreign key (guest_id) references guests(guest_id),
+    foreign key (room_id) references rooms(room_id)
 );
 
-INSERT INTO guests (guest_name, phone) VALUES
+insert into guests (guest_name, phone) values
 	('Nguyễn Văn An', '0901111111'),
 	('Trần Thị Bình', '0902222222'),
 	('Lê Văn Cường', '0903333333'),
 	('Phạm Thị Dung', '0904444444'),
 	('Hoàng Văn Em', '0905555555');
 
-INSERT INTO rooms (room_type, price_per_day) VALUES
+insert into rooms (room_type, price_per_day) values
 	('Standard', 500000),
 	('Standard', 500000),
 	('Deluxe', 800000),
@@ -40,7 +40,7 @@ INSERT INTO rooms (room_type, price_per_day) VALUES
 	('VIP', 1500000),
 	('VIP', 2000000);
 
-INSERT INTO bookings (guest_id, room_id, check_in, check_out) VALUES
+insert bookings (guest_id, room_id, check_in, check_out) values
 	(1, 1, '2024-01-10', '2024-01-12'), -- 2 ngày
 	(1, 3, '2024-03-05', '2024-03-10'), -- 5 ngày
 	(2, 2, '2024-02-01', '2024-02-03'), -- 2 ngày
@@ -58,11 +58,11 @@ select room_type from rooms;
 select 
 	room_type,
     price_per_day
-from rooms group by room_type order by price asc;
+from rooms order by price asc;
 -- Hiển thị các phòng có giá thuê lớn hơn 1.000.000
 select * from rooms where price_per_day > 1000000;
 -- Liệt kê các lần đặt phòng diễn ra trong năm 2024
-select * from booking where year(chec_in) = 2024;
+select * from bookings where year(chec_in) = 2024;
 -- Cho biết số lượng phòng của từng loại phòng
 select 
 	room_type,
