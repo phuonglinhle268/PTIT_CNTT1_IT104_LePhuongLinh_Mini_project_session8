@@ -54,7 +54,7 @@ insert bookings (guest_id, room_id, check_in, check_out) values
 select guest_name, phone from guests;
 -- Liệt kê các loại phòng khác nhau trong khách sạn
 select room_type from rooms;
--- Hiển thị loại phòng và giá thuê theo ngày, sắp xếp theo giá tăng dần
+-- Hiển thị loại phòng và giá thuê theo ngày, sắp xếp giá tăng dần
 select 
 	room_type,
     price_per_day
@@ -62,7 +62,7 @@ from rooms order by price asc;
 -- Hiển thị các phòng có giá thuê lớn hơn 1.000.000
 select * from rooms where price_per_day > 1000000;
 -- Liệt kê các lần đặt phòng diễn ra trong năm 2024
-select * from bookings where year(chec_in) = 2024;
+select * from bookings where year(check_in) = 2024;
 -- Cho biết số lượng phòng của từng loại phòng
 select 
 	room_type,
@@ -114,7 +114,7 @@ select
     count(b.booking_id) as total_booking
 from guests gue
 join bookings b on gue.guest_id = b.guest_id
-group by gue.guest_id, gue.guest_name
+group by gue.guest_id, gue.guest_name 
 having count(b.booking_id) >= 2;
 
 -- Tìm loại phòng có số lượt đặt phòng nhiều nhất
@@ -125,3 +125,17 @@ from bookings b
 join rooms r on b.room_id = r.room_id
 group by r.room_type
 order by booking_count desc limit 1;
+
+-- PHẦN 3
+-- Hiển thị những phòng có giá thuê cao hơn giá trung bình của tất cả các phòng
+select * from rooms where price_per_day > (select avg(price_per_day) from rooms);
+-- Hiển thị những khách chưa từng đặt phòng
+select * from guests where guest_id not in(select guest_id from booking);
+-- Tìm phòng được đặt nhiều lần nhất
+select
+	room_id,
+    booking_time
+from (
+	select room_id, count(*) as booking_time from booking group by room_id) as booking_room
+order by booking_time desc limit 1;
+
